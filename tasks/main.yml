@@ -19,3 +19,12 @@
     path=/etc/nginx/sites-enabled/default
     state=absent
   notify: restart nginx
+
+- name: create directory for cache
+  sudo: true
+  file: >
+    path={{ nginx_extras.cache_dir }}
+    state=directory
+    owner={{ nginx_extras.cache_user }}
+    group={{ nginx_extras.cache_group }}
+  when: nginx_extras.cache_dir is defined
