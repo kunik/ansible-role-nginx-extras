@@ -1,27 +1,27 @@
 - name: add nginx PPA
-  sudo: true
+  become: yes
   apt_repository: repo=ppa:nginx/stable
 
 - name: install 'nginx'
-  sudo: true
+  become: yes
   apt: pkg=nginx-extras state=present
 
 - name: delete nginx default config
-  sudo: true
+  become: yes
   file: >
     path=/etc/nginx/sites-available/default
     state=absent
   notify: restart nginx
 
 - name: delete nginx default config symlink
-  sudo: true
+  become: yes
   file: >
     path=/etc/nginx/sites-enabled/default
     state=absent
   notify: restart nginx
 
 - name: create directory for cache
-  sudo: true
+  become: yes
   file: >
     path={{ nginx_extras.cache_dir }}
     state=directory
