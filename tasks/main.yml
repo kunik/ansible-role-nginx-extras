@@ -28,3 +28,11 @@
     owner={{ nginx_extras.cache_user }}
     group={{ nginx_extras.cache_group }}
   when: nginx_extras.cache_dir is defined
+
+- name: fix logrotate.d config
+  become: yes
+  replace: >
+    dest=/etc/logrotate.d/nginx
+    regexp='^(\s+)invoke-rc\.d\s+nginx\s+rotate.*$'
+    replace='\1[ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`'
+    validate='/usr/sbin/logrotate -df %s'
